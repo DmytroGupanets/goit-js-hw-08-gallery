@@ -115,8 +115,8 @@ function onClickOpenModalWithPicture(event) {
   window.addEventListener("keydown", onArrowShiftPictures);
   lightBoxRef.classList.add("is-open");
 
-  lightBoxImageRef.setAttribute("src", `${event.target.dataset.source}`);
-  lightBoxImageRef.setAttribute("alt", `${event.target.alt}`);
+  setAttributeOnLightboxImg("src", `${event.target.dataset.source}`);
+  setAttributeOnLightboxImg("alt", `${event.target.alt}`);
 }
 
 function onClickCloseModal() {
@@ -124,8 +124,12 @@ function onClickCloseModal() {
   window.removeEventListener("keydown", onArrowShiftPictures);
   lightBoxRef.classList.remove("is-open");
 
-  lightBoxImageRef.setAttribute("src", ` `);
-  lightBoxImageRef.setAttribute("alt", ` `);
+  setAttributeOnLightboxImg("src", ` `);
+  setAttributeOnLightboxImg("alt", ` `);
+}
+
+function setAttributeOnLightboxImg(attName, attValue) {
+  lightBoxImageRef.setAttribute(attName, attValue);
 }
 
 function onEscapeCloseModal(event) {
@@ -150,11 +154,11 @@ function onModalLeftArrowPress() {
 
   if (currentPictureIndex === -1) return false;
 
-  lightBoxImageRef.setAttribute(
+  setAttributeOnLightboxImg(
     "src",
     `${galleryItems[currentPictureIndex].original}`
   );
-  lightBoxImageRef.setAttribute(
+  setAttributeOnLightboxImg(
     "alt",
     `${galleryItems[currentPictureIndex].description}`
   );
@@ -163,13 +167,13 @@ function onModalLeftArrowPress() {
 function onModalRightArrowPress() {
   const currentPictureIndex = findIdOfPresentPicture() + 1;
 
-  if (currentPictureIndex === 9) return false;
+  if (currentPictureIndex === galleryItems.length) return false;
 
-  lightBoxImageRef.setAttribute(
+  setAttributeOnLightboxImg(
     "src",
     `${galleryItems[currentPictureIndex].original}`
   );
-  lightBoxImageRef.setAttribute(
+  setAttributeOnLightboxImg(
     "alt",
     `${galleryItems[currentPictureIndex].description}`
   );
@@ -177,10 +181,12 @@ function onModalRightArrowPress() {
 
 function findIdOfPresentPicture() {
   let currentPictureUrl = lightBoxImageRef.getAttribute("src");
+  let index = 0;
 
-  for (let i = 0; i < galleryItems.length; i += 1) {
-    if (galleryItems[i].original === currentPictureUrl) {
-      return i;
+  galleryItems.forEach((item) => {
+    if (item.original === currentPictureUrl) {
+      return (index = galleryItems.indexOf(item));
     }
-  }
+  });
+  return index;
 }
