@@ -181,12 +181,6 @@ function onModalRightArrowPress() {
 
 function findIdOfPresentPicture() {
   let currentPictureUrl = lightBoxImageRef.getAttribute("src");
-  let index = 0;
 
-  galleryItems.forEach((item) => {
-    if (item.original === currentPictureUrl) {
-      return (index = galleryItems.indexOf(item));
-    }
-  });
-  return index;
+  return galleryItems.findIndex((item) => item.original === currentPictureUrl);
 }
